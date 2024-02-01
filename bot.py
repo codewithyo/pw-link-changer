@@ -25,7 +25,7 @@ async def change(event):
     except Exception as e:
         await conv.send_message(e)
 
-    async with bot.conversation(event.chat_id, timeout=2) as conv:
+    async with bot.conversation(event.chat_id, timeout=200) as conv:
         try:
             await conv.send_message(
             'Choose quality',   
