@@ -2,12 +2,12 @@
 Hi, this is PW link changer
 
 # Environment Variables
-| Key          | Value                      |
-|--------------|----------------------------|
-| API_ID       | API ID for your telegram   |
-| API_HASH     | API Hash for your telegram |
-| BOT_TOKEN    | Bot token of your bot      |
-| BOT_USERNAME | Username of your bot       |
+| Key          | Value                           |
+|--------------|---------------------------------|
+| API_ID       | API ID for your telegram        |
+| API_HASH     | API Hash for your telegram      |
+| BOT_TOKEN    | Bot token of your bot           |
+| FORCE_SUB    | Force subscribe of your channel |
 
 
 # Deploy to Render
