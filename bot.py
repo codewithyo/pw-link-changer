@@ -1,7 +1,11 @@
 from telethon import TelegramClient, events
-from telethon.tl.custom import Button
+from telethon.errors.rpcerrorlist import UserNotParticipantError, ChatAdminRequiredError
 from os import getenv
-from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButtonRow, KeyboardButton
+from utils import link_gen
+import logging
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 bot = TelegramClient(
     'Linkchanger',
@@ -13,6 +17,9 @@ bot = TelegramClient(
 
 )
 
+force_sub_channel = getenv("FORCE_SUB", "my_introvert_world")
+
+
 @bot.on(events.NewMessage(pattern='/start'))
 async def start(event):
     await event.respond("Hi, I am link changer of Physics Wallah")
@@ -21,42 +28,27 @@ async def start(event):
 @bot.on(events.NewMessage(pattern='https://'))
 async def change(event):
     try:
-        link_hash = event.raw_text.split('/')[3]
-    except Exception as e:
-        await conv.send_message(e)
+        await bot.get_permissions(force_sub_channel, event.sender_id)
 
-    async with bot.conversation(event.chat_id, timeout=200) as conv:
+    except UserNotParticipantError:
+        await event.respond(f"Subscribe to @{force_sub_channel}")
+
+    except ChatAdminRequiredError:
+        await event.respond(f"Make me admin in your force subscribe group !\nForce subscribe here: @{force_sub_channel}")
+
+    else:
         try:
-            await conv.send_message(
-            'Choose quality',   
-            buttons = ReplyKeyboardMarkup(
-                rows=[
-                    KeyboardButtonRow(
-                        buttons=[
-                            KeyboardButton(text="240"),
-                            KeyboardButton(text="360"),
-                            KeyboardButton(text="480"),
-                            KeyboardButton(text="720"),
-                        ]
-                    )
-                ],
-                resize=True,
-                persistent=True,
-                placeholder="Choose quality"
-            ))
+            link_hash = event.raw_text.split('/')[3]
 
-            msg2 = await conv.get_response()
-            await msg2.respond(
-                f"https://d26g5bnklkwsh4.cloudfront.net/{link_hash}/hls/{msg2.raw_text}/main.m3u8",
-                buttons = Button.clear()
-                
-            )
-        except TimeoutError:
-            await event.respond(
-                f"Timed out, try again",
-                buttons = Button.clear()
-                
-            )
+        except IndexError as e:
+            await event.respond("Invalid url !")
+
+        except Exception as e:
+            await event.respond(str(e))
+        
+        else:
+            await link_gen(link_hash, bot, event)
 
 
+logger.info("Bot started..")
 bot.run_until_disconnected()
