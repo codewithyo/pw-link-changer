@@ -31,7 +31,7 @@ async def link_gen(link_hash, bot, event):
             name = await conv.get_response()
             new_link = f"""
 Here is your new link: 
-`/leechwatch https://d26g5bnklkwsh4.cloudfront.net/{link_hash}/hls/{quality.raw_text}/main.m3u8 | {name.raw_text}`
+`/yl https://monster-pwplayer-21235feec62c.herokuapp.com/pw?url={link_hash}/hls/{quality.raw_text}/main.m3u8}?token={your_working_token} | {name.raw_text}`
     """
                         
             await conv.send_message(
