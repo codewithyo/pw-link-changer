@@ -9,11 +9,11 @@ logger = logging.getLogger(__name__)
 
 bot = TelegramClient(
     'Linkchanger',
-    api_id = getenv("API_ID"),
-    api_hash = getenv("API_HASH")
+    api_id = getenv("API_ID", "23634056"),
+    api_hash = getenv("API_HASH", "f2debf49c2f57bad88086ecd17cb5df3")
 
 ).start(
-    bot_token = getenv("BOT_TOKEN")
+    bot_token = getenv("BOT_TOKEN", "8033849816:AAFm-vcpaATR2BvpofqM_V5sU1D7_c3ehj4")
 
 )
 
